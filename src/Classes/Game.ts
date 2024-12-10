@@ -110,7 +110,7 @@ export abstract class Game {
     if (!this.opponent) {
       this.opponent = user
     } else {
-      throw new Error('Opponent is already set.')
+      console.error('Opponent is already set.')
     }
   }
 
@@ -176,16 +176,17 @@ export abstract class Game {
   }
 
   static removeGameFromWaitingList(gameId: UUID) {
-    Game.waitingGames.filter((g) => g[0] !== gameId)
+    Game.waitingGames = Game.waitingGames.filter((g) => g[0] !== gameId)
   }
 
   static removeGameFromRunningList(gameId: UUID) {
-    Game.runningGames.filter((g) => g[0] !== gameId)
+    Game.runningGames = Game.runningGames.filter((g) => g[0] !== gameId)
   }
 
   static addGameToWaitingList(game: Game) {
     Game.waitingGames.push([game.gameId, game])
   }
+
   static addGameToRunningList(game: Game) {
     Game.runningGames.push([game.gameId, game])
   }

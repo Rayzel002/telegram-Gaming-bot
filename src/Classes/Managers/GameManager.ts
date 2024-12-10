@@ -38,12 +38,17 @@ export class GameManager {
           gameId,
           `${winner.username} wins! ${loser?.username} loses.`
         )
+
         this.updateUserState(winner, game, false)
         this.updateUserState(loser, game, false)
         winner.sendNotificationMessage(Notifications.youWon)
         loser?.sendNotificationMessage(Notifications.youLost)
       } else if (result === 'draw') {
         this.endGame(gameId, 'Draw!')
+
+        this.updateUserState(game.creator, game, false)
+        this.updateUserState(game.opponent!, game, false)
+
         game.creator.sendNotificationMessage(Notifications.itsADraw)
         game.opponent?.sendNotificationMessage(Notifications.itsADraw)
       } else {
@@ -139,9 +144,13 @@ export class GameManager {
   // }
 
   public getWaitingGameOfType(gameType: GameTypes): Game | null {
-    const game = Game.waitingGames.find(
-      ([_, game]) => game.gameType === gameType
-    )?.[1]
+    if (Game.waitingGames.length === 0) {
+      return null
+    }
+    const reversedWaitingGames = Game.waitingGames.reverse()
+    const game = reversedWaitingGames.filter(
+      (g) => g[1].gameType === gameType
+    )[0][1]
     if (game) {
       console.log('Game found!')
       return game

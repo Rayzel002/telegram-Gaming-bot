@@ -12,7 +12,7 @@ export class User {
   userId: number
   username: string
 
-  isInWaitingGame: boolean
+  // isInWaitingGame: boolean
   isInRunningGame: boolean
   currentGame: Game | null
   currentGameId: UUID | null
@@ -40,7 +40,7 @@ export class User {
   constructor(userId: number, username: string, ctx: Context) {
     this.userId = userId
     this.username = username.trim()
-    this.isInWaitingGame = false
+    // this.isInWaitingGame = false
     this.isInRunningGame = false
     this.currentGame = null
     this.currentGameId = null
@@ -84,7 +84,7 @@ export class User {
     ctx: Context | null,
     userId: number,
     username: string
-  ): User {
+  ): User | null {
     if (!ctx) {
       throw new Error('Context is required for user registration.')
     }
@@ -94,7 +94,8 @@ export class User {
     }
 
     if (!this.isValidName(username)) {
-      throw new Error(`Invalid username: ${username}`)
+      ctx.reply('Username must be between 3 and 32 characters long.')
+      return null
     }
 
     const user = new User(userId, username, ctx)

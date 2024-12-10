@@ -116,7 +116,7 @@ bot.action('exit', async (ctx) => {
 
 bot.action('tic_tac_toe_online', async (ctx) => {
   const user = User.findUser(ctx.from.id)
-  const gameManager = GameManager.getInstance()
+  let gameManager: GameManager | null = GameManager.getInstance()
   if (user.isInRunningGame) {
     user.sendNotificationMessage(Notifications.alreadyInGame)
     return
@@ -128,20 +128,22 @@ bot.action('tic_tac_toe_online', async (ctx) => {
   console.log('TicTacToeWaitingGame: ', ticTacToeWaitingGame)
 
   if (ticTacToeWaitingGame) {
+    console.log('Joining TicTacToe game...')
     gameManager.joinTicTacToeGame(ticTacToeWaitingGame, user)
 
     // Notify both players
     user.sendNotificationMessage(Notifications.gameStarted)
   } else {
+    console.log('Creating TicTacToe game...')
     gameManager.createTicTacToeGame(user, TicTacToeGameMode.Solo)
   }
+  gameManager = null
 })
 
 bot.on('callback_query', async (ctx) => {
   const user = User.findUser(ctx.from.id)
   const callbackQuery = ctx.callbackQuery
-  const game = user.currentGame
-  const gameManager = GameManager.getInstance()
+  let gameManager: GameManager | null = GameManager.getInstance()
 
   if (!user) {
     console.error('User is not found')
@@ -178,6 +180,7 @@ bot.on('callback_query', async (ctx) => {
       console.error('idk')
     }
   }
+  gameManager = null
 })
 
 // Launch the bot
@@ -186,11 +189,13 @@ bot.launch().then(() => console.log('Bot is running...'))
 // Graceful shutdown on SIGINT and SIGTERM
 process.once('SIGINT', async () => {
   gracefullShutDown()
+  console.log('SIGINT received. Shutting down...')
   bot.stop('SIGINT')
 })
 
 process.once('SIGTERM', async () => {
   gracefullShutDown()
+  console.log('SIGTERM received. Shutting down...')
   bot.stop('SIGTERM')
 })
 
