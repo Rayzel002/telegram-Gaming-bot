@@ -7,6 +7,7 @@
     "start": "node dist/bot.js",
     "build": "tsc",
     "dev": "tsc && node dist/bot.js",
+    "app": "tsc && node dist/bot.js",
     "clean": "rm -rf dist"
   },
   "keywords": [],
