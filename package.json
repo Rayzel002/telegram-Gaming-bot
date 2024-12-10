@@ -1,0 +1,25 @@
+{
+  "type": "module",
+  "name": "t2",
+  "version": "1.0.0",
+  "main": "dist/bot.js",
+  "scripts": {
+    "start": "node dist/bot.js",
+    "build": "tsc",
+    "dev": "tsc && node dist/bot.js",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [],
+  "author": "Ray",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
